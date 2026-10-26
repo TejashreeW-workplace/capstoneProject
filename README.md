@@ -15,7 +15,9 @@ cd your-repo
 # Initialize clean environment architecture layers
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+pip install pandas==3.* 
+pip install scikit-learn==1.9.*
+pip install fastapi uvicorn pydantic requests
 
 # Run the raw initialization script to create local staging files
 python generate_data.py
@@ -25,6 +27,10 @@ python prepare.py
 
 # Complete model selection and cross-validation pipelines
 python train.py
+
+#Policy-Grounded Case Notes with Validation
+python .\retrieval.py 
+python .\casenote.py 
 
 # Start live production servers
 uvicorn app:app --port 8000

@@ -10,7 +10,7 @@ This automated platform provides a unified pipeline to score, audit, and documen
 ```bash
 # Clone the repository and navigate into the root directory
 git clone https://github.com/TejashreeW-workplace/capstoneProject.git
-cd your-repo
+cd TejashreeW-workplace
 
 # Initialize clean environment architecture layers
 python3 -m venv venv
@@ -23,10 +23,10 @@ pip install fastapi uvicorn pydantic requests
 python generate_data.py
 
 # Run audit pipeline routines
-python prepare.py
+python .\prepare.py
 
 # Complete model selection and cross-validation pipelines
-python train.py
+python .\train.py
 
 #Policy-Grounded Case Notes with Validation
 python .\retrieval.py 
@@ -167,7 +167,7 @@ json { "requests_total": 10, "success_total": 7, "error_total": 3, "success_rate
 2026-10-26 23:10:44,492 INFO Endpoint: /case | Status: 200 | Latency: 16.62ms | Txn: T800006 | Prob: 0.9467
 
 
-# Part D result
+# Part D results
 Verifying target health status endpoints...   
 | Id | Category | Target Path | Expected Status | Observed Status | Result |
 | :--- | :--- | :--- | :--- | :--- | :--- |

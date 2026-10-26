@@ -20,7 +20,7 @@ pip install scikit-learn==1.9.*
 pip install fastapi uvicorn pydantic requests
 
 # Run the raw initialization script to create local staging files
-python generate_data.py
+python .\generate_data.py
 
 # Run audit pipeline routines
 python .\prepare.py

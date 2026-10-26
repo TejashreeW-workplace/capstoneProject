@@ -169,6 +169,7 @@ json { "requests_total": 10, "success_total": 7, "error_total": 3, "success_rate
 # Part D result
 Verifying target health status endpoints...   
 | Id | Category | Target Path | Expected Status | Observed Status | Result |
+| :--- | :--- | :--- | :--- | :--- | :--- |
 | Q0 | happy | / | 200 | 200 | PASS |
 | Q1 | happy | /health | 200 | 200 | PASS |
 | Q2 | happy | /score | 200 | 200 | PASS |

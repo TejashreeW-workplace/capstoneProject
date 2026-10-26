@@ -104,18 +104,17 @@ The top five features are: `amount_vs_avg_ratio`, `txn_count_last_24h`, `amount_
 ### Part C Results
 #### Vector Retrieval Diagnostics Verification Table
 
-| Target Operational Query Staged | Target Expected | Retrieved Match ID | Metric Cosine Score | Validation |
-| :--- | :--- | :--- | :--- | :--- |
-| card payment above INR 50000... | P1 | P1 | 0.5501 | True |
-| how many UPI payments in 24 hours... | P2 | P2 | 0.5622 | True |
-| payment at 3 AM far away... | P3 | P3 | 0.4948 | True |
-| customer reports unauthorised... | P4 | P4 | 0.5689 | True |
-| electronics merchant payment... | P5 | P5 | 0.5641 | True |
-| which payments are approved auto... | P6 | P6 | 0.6250 | True |
-| temporary hold on repeated UPI... | P2 | P2 | 0.4862 | True |
-| what happens after a customer... | P4 | P4 | 0.4867 | True |
-| what is the cafeteria menu today | None | P3 | 0.4251 | True (Filtered) |
-| how do I reset my email password | None | None | 0.0000 | True (Filtered) |
+| Query | Expected | Retrieved | Score | Match |
+| card payment above INR 50000 f | P1 | P1 | 0.5501 | True |
+| how many UPI payments in 24 ho | P2 | P2 | 0.5622 | True |
+| payment at 3 AM far away from  | P3 | P3 | 0.4948 | True |
+| customer reports unauthorised  | P4 | P4 | 0.5689 | True |
+| electronics merchant payment o | P5 | P5 | 0.5641 | True |
+| which payments are approved au | P6 | P6 | 0.6250 | True |
+| temporary hold on repeated UPI | P2 | P2 | 0.4862 | True |
+| what happens after a customer  | P4 | P4 | 0.4867 | True |
+| what is the cafeteria menu tod | None | None | 0.4251 | True |
+| how do I reset my email passwo | None | None | 0.0000 | True |
 
 * **In-Scope Top-1 Hit Verification Count**: 8 / 8 matches correct.
 * **Calibrated Refusal Boundary Threshold Minimum ($MIN\_SCORE$)**: Set at **0.4500**. This sits cleanly between our lowest true in-scope index similarity match of 0.4862 and our highest invalid out-of-scope similarity score of 0.4251.
@@ -144,4 +143,52 @@ json { "requests_total": 10, "success_total": 7, "error_total": 3, "success_rate
 
 # Production Logger Snippets (service.log)
 
-text 2026-10-11 14:22:10,105 INFO Endpoint: /score | Status: 200 | Latency: 4.12ms | Txn: T800001 | Prob: 0.0341 2026-10-11 14:22:15,312 WARNING Endpoint: /score | Status: 200 | Latency: 5.61ms | Txn: T800003 | Prob: 0.1820 2026-10-11 14:22:20,891 ERROR Endpoint: /case | Status: 503 | Latency: 2.04ms | Txn: T900099 | Prob: 0.0000
+2026-10-26 23:08:59,647 INFO Endpoint: / | Status: 307 | Latency: 3.65ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:08:59,656 INFO Endpoint: /docs | Status: 200 | Latency: 0.60ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:09:00,428 INFO Endpoint: /openapi.json | Status: 200 | Latency: 37.43ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:10:44,230 INFO Endpoint: / | Status: 307 | Latency: 0.64ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:10:44,232 INFO Endpoint: /docs | Status: 200 | Latency: 0.20ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:10:44,260 INFO Endpoint: /score | Status: 200 | Latency: 23.96ms | Txn: T800001 | Prob: 0.0711
+2026-10-26 23:10:44,286 INFO Endpoint: /score | Status: 200 | Latency: 21.97ms | Txn: T800002 | Prob: 0.9467
+2026-10-26 23:10:44,308 WARNING Endpoint: /score | Status: 200 | Latency: 19.72ms | Txn: T800003 | Prob: 0.1751
+2026-10-26 23:10:44,314 WARNING Endpoint: /score | Status: 400 | Latency: 1.03ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:10:44,317 WARNING Endpoint: /score | Status: 422 | Latency: 0.66ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:10:44,341 INFO Endpoint: /case | Status: 200 | Latency: 20.91ms | Txn: T900002 | Prob: 0.9467
+2026-10-26 23:10:44,360 WARNING Endpoint: /case | Status: 200 | Latency: 17.69ms | Txn: T900005 | Prob: 0.9467
+2026-10-26 23:10:44,426 ERROR Endpoint: /case | Status: 503 | Latency: 59.88ms | Txn: T900099 | Prob: 0.9467
+2026-10-26 23:10:44,474 INFO Endpoint: /case | Status: 200 | Latency: 20.59ms | Txn: T800001 | Prob: 0.0711
+2026-10-26 23:10:44,492 INFO Endpoint: /case | Status: 200 | Latency: 16.62ms | Txn: T800006 | Prob: 0.9467
+
+
+# Part D result
+Verifying target health status endpoints...   
+| Id | Category | Target Path | Expected Status | Observed Status | Result |
+| Q0 | happy | / | 200 | 200 | PASS |
+| Q1 | happy | /health | 200 | 200 | PASS |
+| Q2 | happy | /score | 200 | 200 | PASS |
+| Q3 | escalation | /score | 200 | 200 | PASS |
+| Q4 | escalation | /score | 200 | 200 | PASS |
+| Q5 | edge | /score | 400 | 400 | PASS |
+| Q6 | edge | /score | 422 | 422 | PASS |
+| Q7 | escalation | /case | 200 | 200 | PASS |
+| Q8 | escalation | /case | 200 | 200 | PASS |
+| Q9 | edge | /case | 503 | 503 | PASS |
+| Q10 | happy | /case | 200 | 200 | PASS |
+| Q11 | edge | /case | 200 | 200 | PASS |
+
+--- Summary Performance Metrics Breakdown ---
+Category happy: 4/4 Passed
+Category escalation: 4/4 Passed
+Category edge: 4/4 Passed
+
+Live System Metrics Response Block:
+{
+  "requests_total": 15,
+  "success_total": 12,
+  "error_total": 3,
+  "success_rate": 0.8,
+  "error_rate": 0.2,
+  "avg_latency_ms": 16.37,
+  "human_review_total": 5,
+  "human_review_rate": 0.3333
+}

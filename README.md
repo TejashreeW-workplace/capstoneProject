@@ -148,7 +148,8 @@ The top five features are: `amount_vs_avg_ratio`, `txn_count_last_24h`, `amount_
 json { "requests_total": 10, "success_total": 7, "error_total": 3, "success_rate": 0.7000, "error_rate": 0.3000, "avg_latency_ms": 12.4512, "human_review_total": 5, "human_review_rate": 0.5000 } 
 
 # Production Logger Snippets (service.log)
-
+| Endpoint | Status | Latency | Txn | Prob |
+| :--- | :--- | :--- | :--- | :--- |
 2026-10-26 23:08:59,647 INFO Endpoint: / | Status: 307 | Latency: 3.65ms | Txn: UNKNOWN | Prob: 0.0000
 2026-10-26 23:08:59,656 INFO Endpoint: /docs | Status: 200 | Latency: 0.60ms | Txn: UNKNOWN | Prob: 0.0000
 2026-10-26 23:09:00,428 INFO Endpoint: /openapi.json | Status: 200 | Latency: 37.43ms | Txn: UNKNOWN | Prob: 0.0000

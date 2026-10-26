@@ -36,7 +36,6 @@ python .\casenote.py
 uvicorn app:app --port 8000
 
 # Execute end-to-end integration and smoke test suites
-rm -f service.log
 python smoke_test.py
 ```
 
@@ -111,6 +110,7 @@ The top five features are: `amount_vs_avg_ratio`, `txn_count_last_24h`, `amount_
 #### Vector Retrieval Diagnostics Verification Table
 
 | Query | Expected | Retrieved | Score | Match |
+| :--- | :--- | :--- | :--- | :--- |
 | card payment above INR 50000 f | P1 | P1 | 0.5501 | True |
 | how many UPI payments in 24 ho | P2 | P2 | 0.5622 | True |
 | payment at 3 AM far away from  | P3 | P3 | 0.4948 | True |

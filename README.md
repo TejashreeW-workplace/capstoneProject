@@ -1,4 +1,4 @@
-# capstoneProject
+# CapstoneProject
 Public repository for the project, with main branch as the default branch.
 
 # Fraud Triage Service
@@ -143,11 +143,11 @@ The top five features are: `amount_vs_avg_ratio`, `txn_count_last_24h`, `amount_
 * **Global Evaluation Summary**: Total Calls: 19 | Initial Fast Passes: 3 | Recovered on Retry loops: 6 | Safe Default Fallbacks: 1 | Output Guardrail Safety Overrides: 1
 
 
-# Production In-Memory Aggregated Metrics (GET /metrics)
+### Production In-Memory Aggregated Metrics (GET /metrics)
 
 json { "requests_total": 10, "success_total": 7, "error_total": 3, "success_rate": 0.7000, "error_rate": 0.3000, "avg_latency_ms": 12.4512, "human_review_total": 5, "human_review_rate": 0.5000 } 
 
-# Production Logger Snippets (service.log)
+### Production Logger Snippets (service.log)
 | Endpoint | Status | Latency | Txn | Prob |
 | :--- | :--- | :--- | :--- | :--- |
 2026-10-26 23:08:59,647 INFO Endpoint: / | Status: 307 | Latency: 3.65ms | Txn: UNKNOWN | Prob: 0.0000
@@ -166,8 +166,7 @@ json { "requests_total": 10, "success_total": 7, "error_total": 3, "success_rate
 2026-10-26 23:10:44,474 INFO Endpoint: /case | Status: 200 | Latency: 20.59ms | Txn: T800001 | Prob: 0.0711
 2026-10-26 23:10:44,492 INFO Endpoint: /case | Status: 200 | Latency: 16.62ms | Txn: T800006 | Prob: 0.9467
 
-
-# Part D results
+### Part D results
 Verifying target health status endpoints...   
 | Id | Category | Target Path | Expected Status | Observed Status | Result |
 | :--- | :--- | :--- | :--- | :--- | :--- |

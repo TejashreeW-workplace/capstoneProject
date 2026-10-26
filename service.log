@@ -1,0 +1,15 @@
+2026-10-26 23:08:59,647 INFO Endpoint: / | Status: 307 | Latency: 3.65ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:08:59,656 INFO Endpoint: /docs | Status: 200 | Latency: 0.60ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:09:00,428 INFO Endpoint: /openapi.json | Status: 200 | Latency: 37.43ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:10:44,230 INFO Endpoint: / | Status: 307 | Latency: 0.64ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:10:44,232 INFO Endpoint: /docs | Status: 200 | Latency: 0.20ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:10:44,260 INFO Endpoint: /score | Status: 200 | Latency: 23.96ms | Txn: T800001 | Prob: 0.0711
+2026-10-26 23:10:44,286 INFO Endpoint: /score | Status: 200 | Latency: 21.97ms | Txn: T800002 | Prob: 0.9467
+2026-10-26 23:10:44,308 WARNING Endpoint: /score | Status: 200 | Latency: 19.72ms | Txn: T800003 | Prob: 0.1751
+2026-10-26 23:10:44,314 WARNING Endpoint: /score | Status: 400 | Latency: 1.03ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:10:44,317 WARNING Endpoint: /score | Status: 422 | Latency: 0.66ms | Txn: UNKNOWN | Prob: 0.0000
+2026-10-26 23:10:44,341 INFO Endpoint: /case | Status: 200 | Latency: 20.91ms | Txn: T900002 | Prob: 0.9467
+2026-10-26 23:10:44,360 WARNING Endpoint: /case | Status: 200 | Latency: 17.69ms | Txn: T900005 | Prob: 0.9467
+2026-10-26 23:10:44,426 ERROR Endpoint: /case | Status: 503 | Latency: 59.88ms | Txn: T900099 | Prob: 0.9467
+2026-10-26 23:10:44,474 INFO Endpoint: /case | Status: 200 | Latency: 20.59ms | Txn: T800001 | Prob: 0.0711
+2026-10-26 23:10:44,492 INFO Endpoint: /case | Status: 200 | Latency: 16.62ms | Txn: T800006 | Prob: 0.9467

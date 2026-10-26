@@ -17,6 +17,7 @@ BIG    = {"merchant_category": "Utilities", "city": "Pune", "payment_mode": "Net
           "distance_from_home_km": 0.0, "is_new_device": 1, "account_age_days": 2200}
 
 TESTS = [
+    {"id": "Q0", "cat": "happy", "method": "GET", "path": "/", "payload": None, "exp_status": 200},
     {"id": "Q1", "cat": "happy", "method": "GET", "path": "/health", "payload": None, "exp_status": 200},
     {"id": "Q2", "cat": "happy", "method": "POST", "path": "/score", "payload": {**BENIGN, "txn_id": "T800001"}, "exp_status": 200},
     {"id": "Q3", "cat": "escalation", "method": "POST", "path": "/score", "payload": {**RISKY, "txn_id": "T800002"}, "exp_status": 200},

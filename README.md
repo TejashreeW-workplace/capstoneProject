@@ -27,8 +27,7 @@ python prepare.py
 python train.py
 
 # Start live production servers
-uvicorn app:app --port 8000 &
-sleep 5
+uvicorn app:app --port 8000
 
 # Execute end-to-end integration and smoke test suites
 rm -f service.log

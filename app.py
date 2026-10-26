@@ -2,7 +2,7 @@ import time
 import logging
 import pandas as pd
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import BaseModel, Field
 from typing import Optional
 import train
@@ -13,6 +13,10 @@ logging.basicConfig(filename="service.log", level=logging.INFO, format="%(asctim
 logger = logging.getLogger("TriageService")
 
 app = FastAPI()
+
+@app.get("/")
+def root():
+    return RedirectResponse(url="/docs")
 
 # Global State Engine Cache
 MODEL_ENG_DATA = train.build_final_model()
@@ -166,45 +170,42 @@ def score_txn(t: Txn, request: Request):
 
 @app.post("/case")
 def case_txn(c: CaseIn, request: Request):
-    try:
-        prob, flagged, decision = execute_scoring_logic(c, request)
-        
-        if flagged:
-            try:
-                res = casenote.run_case(c.txn_id, prob, c.amount_inr, c.question)
-            except ConnectionError:
-                return JSONResponse(status_code=503, content={"error": "case-note service temporarily unavailable, try again later"})
-                
-            if res["status"] == "no_policy_match":
-                final_decision = "hold_for_review"
-                note = None
-            else:
-                note = res["case_note"]
-                if note and note["recommended_action"] == "approve":
-                    note["recommended_action"] = "hold_for_review"
-                    res["guardrail_override"] = True
-                final_decision = note["recommended_action"] if note else "hold_for_review"
-                
-            request.state.info["safe_default"] = res.get("safe_default", False)
-            request.state.info["override_flag"] = res.get("guardrail_override", False)
+    prob, flagged, decision = execute_scoring_logic(c, request)
+    
+    if flagged:
+        try:
+            res = casenote.run_case(c.txn_id, prob, c.amount_inr, c.question)
+        except ConnectionError:
+            return JSONResponse(status_code=503, content={"error": "case-note service temporarily unavailable, try again later"})
             
-            hr = (final_decision in ["hold_for_review", "block_and_notify"]) or res.get("safe_default", False)
-            if hr:
-                METRICS["human_review_total"] += 1
-                
-            return {
-                "txn_id": c.txn_id, "fraud_probability": round(prob, 4), "flagged": flagged,
-                "decision": final_decision, "human_review": hr, "case_note": note,
-                "attempts": res["attempts"], "safe_default": res["safe_default"], "guardrail_override": res["guardrail_override"]
-            }
+        if res["status"] == "no_policy_match":
+            final_decision = "hold_for_review"
+            note = None
         else:
-            hr = (decision == "hold_for_review")
-            if hr:
-                METRICS["human_review_total"] += 1
-            return {
-                "txn_id": c.txn_id, "fraud_probability": round(prob, 4), "flagged": flagged,
-                "decision": decision, "human_review": hr, "case_note": None,
-                "attempts": 0, "safe_default": False, "guardrail_override": False
-            }
-    except HTTPException as ex:
-        return JSONResponse(status_code=ex.status_code, content=ex.detail)
+            note = res["case_note"]
+            if note and note["recommended_action"] == "approve":
+                note["recommended_action"] = "hold_for_review"
+                res["guardrail_override"] = True
+            final_decision = note["recommended_action"] if note else "hold_for_review"
+            
+        request.state.info["safe_default"] = res.get("safe_default", False)
+        request.state.info["override_flag"] = res.get("guardrail_override", False)
+        
+        hr = (final_decision in ["hold_for_review", "block_and_notify"]) or res.get("safe_default", False)
+        if hr:
+            METRICS["human_review_total"] += 1
+            
+        return {
+            "txn_id": c.txn_id, "fraud_probability": round(prob, 4), "flagged": flagged,
+            "decision": final_decision, "human_review": hr, "case_note": note,
+            "attempts": res["attempts"], "safe_default": res["safe_default"], "guardrail_override": res["guardrail_override"]
+        }
+    else:
+        hr = (decision == "hold_for_review")
+        if hr:
+            METRICS["human_review_total"] += 1
+        return {
+            "txn_id": c.txn_id, "fraud_probability": round(prob, 4), "flagged": flagged,
+            "decision": decision, "human_review": hr, "case_note": None,
+            "attempts": 0, "safe_default": False, "guardrail_override": False
+        }

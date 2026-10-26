@@ -1,74 +1,6 @@
 # capstoneProject
 Public repository for the project, with main branch as the default branch.
 
-# Part A result 
-Raw shape: 6090 rows, 14 columns
-Exact duplicate rows: 90
-Missing amount_inr: 76
-Missing distance_from_home_km: 193
-Out of range amounts: 5
-Distinct merchant_category spellings: 24
-Distinct city spellings: 24
-Cleaned table shape: 5919 rows
-merchant_category
-Grocery          1406
-Food Delivery    1326
-Fashion           976
-Electronics       845
-Utilities         685
-Travel            681
-Name: count, dtype: int64
-payment_mode
-UPI           3221
-Card          1450
-NetBanking     731
-Wallet         517
-Name: count, dtype: int64
-Min amount: 141.37, Max amount: 105883.95
-is_night sum: 365
-high_value sum: 17
-Max ratio: 13.11
-Fraud rows: 366 of 5919 (6.18%)
-CB=1 count: 373, fraud: 304
-CB=0 count: 5546, fraud: 62
-
-# Part B result 
-Columns structural pinned list: ['amount_inr', 'hour_of_day', 'txn_count_last_24h', 'avg_amount_30d_inr', 'distance_from_home_km', 'is_new_device', 'account_age_days', 'amount_vs_avg_ratio', 'is_night', 'high_value', 'city_Bengaluru', 'city_Chennai', 'city_Delhi', 'city_Kolkata', 'city_Mumbai', 'city_Pune', 'merchant_category_Electronics', 'merchant_category_Fashion', 'merchant_category_Food Delivery', 'merchant_category_Grocery', 'merchant_category_Travel', 'merchant_category_Utilities', 'payment_mode_Card', 'payment_mode_NetBanking', 'payment_mode_UPI', 'payment_mode_Wallet']
-Train size: 3551 (Fraud: 220)
-Val size: 1184 (Fraud: 73)
-Test size: 1184 (Fraud: 73)
-Calculated Training Median: 12.3
-Selected Optimal Threshold T_star: 0.4
-
-# Part C  (subpart 1) result
-| Query | Expected | Retrieved | Score | Match |
-| card payment above INR 50000 f | P1 | P1 | 0.5501 | True |
-| how many UPI payments in 24 ho | P2 | P2 | 0.5622 | True |
-| payment at 3 AM far away from  | P3 | P3 | 0.4948 | True |
-| customer reports unauthorised  | P4 | P4 | 0.5689 | True |
-| electronics merchant payment o | P5 | P5 | 0.5641 | True |
-| which payments are approved au | P6 | P6 | 0.6250 | True |
-| temporary hold on repeated UPI | P2 | P2 | 0.4862 | True |
-| what happens after a customer  | P4 | P4 | 0.4867 | True |
-| what is the cafeteria menu tod | None | None | 0.4251 | True |
-| how do I reset my email passwo | None | None | 0.0000 | True |
-
-# Part C (subpart 2) result
-
-S1 (T900001) -> Policy: P1, Attempts: 1, Failures: [], Actions: hold_for_review, Override: False
-S2 (T900002) -> Policy: P2, Attempts: 2, Failures: [1], Actions: hold_for_review, Override: False
-S3 (T900003) -> Policy: P3, Attempts: 2, Failures: [2], Actions: hold_for_review, Override: False
-S4 (T900004) -> Policy: P4, Attempts: 2, Failures: [3], Actions: block_and_notify, Override: False
-S5 (T900005) -> Policy: P5, Attempts: 3, Failures: [1, 1, 1], Actions: hold_for_review, Override: False
-S6 (T900006) -> Policy: P2, Attempts: 1, Failures: [], Actions: hold_for_review, Override: True
-S7 (T900007) -> Policy: P1, Attempts: 2, Failures: [3], Actions: hold_for_review, Override: False
-S8 (T900008) -> Policy: P4, Attempts: 1, Failures: [], Actions: block_and_notify, Override: False
-S9 (T900009) -> Policy: P3, Attempts: 3, Failures: [1, 2], Actions: hold_for_review, Override: False
-S10 (T900010) -> Policy: P2, Attempts: 2, Failures: [3], Actions: hold_for_review, Override: False
-
-# Part D result
-
-
 # Fraud Triage Service
 
 ### Overview
@@ -77,7 +9,7 @@ This automated platform provides a unified pipeline to score, audit, and documen
 ### Reproduce
 ```bash
 # Clone the repository and navigate into the root directory
-git clone https://github.com<user>/<repo>.git
+git clone https://github.com/TejashreeW-workplace/capstoneProject.git
 cd your-repo
 
 # Initialize clean environment architecture layers
@@ -115,7 +47,7 @@ python smoke_test.py
 | Distinct raw merchant_category spellings | 24 |
 | Distinct raw city spellings | 24 |
 
-Missing distance metrics must not be imputed during global preprocessing stages to strictly prevent statistical information from downstream validation or testing folds from cross-contaminating the target training partition.
+* **Missing distance metrics must not be imputed during global preprocessing stages to strictly prevent statistical information from downstream validation or testing folds from cross-contaminating the target training partition.
 
 #### Leakage Audit & Metrics Target
 * **chargeback_filed = 1**: 373 total rows, 304 fraud rows.
@@ -206,3 +138,11 @@ The top five features are: `amount_vs_avg_ratio`, `txn_count_last_24h`, `amount_
 
 * **Global Evaluation Summary**: Total Calls: 19 | Initial Fast Passes: 3 | Recovered on Retry loops: 6 | Safe Default Fallbacks: 1 | Output Guardrail Safety Overrides: 1
 
+
+# Production In-Memory Aggregated Metrics (GET /metrics)
+
+json { "requests_total": 10, "success_total": 7, "error_total": 3, "success_rate": 0.7000, "error_rate": 0.3000, "avg_latency_ms": 12.4512, "human_review_total": 5, "human_review_rate": 0.5000 } 
+
+# Production Logger Snippets (service.log)
+
+text 2026-10-11 14:22:10,105 INFO Endpoint: /score | Status: 200 | Latency: 4.12ms | Txn: T800001 | Prob: 0.0341 2026-10-11 14:22:15,312 WARNING Endpoint: /score | Status: 200 | Latency: 5.61ms | Txn: T800003 | Prob: 0.1820 2026-10-11 14:22:20,891 ERROR Endpoint: /case | Status: 503 | Latency: 2.04ms | Txn: T900099 | Prob: 0.0000
